@@ -394,7 +394,7 @@ local function formspec(pos, player, placeholdername, placeholderadresse)
       "table[3.2,0.54;2,2.5;table;".. table.concat(get_fav(pos), ",") ..";]")
   else
     local portalname = "Portalname"
-    local portaladresse = "Portaladresse"
+    local portaladresse = "Destination"
     if placeholdername ~= nil then
       portalname = placeholdername
     end
@@ -406,7 +406,7 @@ local function formspec(pos, player, placeholdername, placeholderadresse)
       "label[2.34,0;".. get_adress(pos) .."]" ..
       "box[0,0;5.2,0.4;#ff0000]" ..
       "field[0.3,1;3.2,0.5;name;;".. portalname .."]" ..
-      "field[0.3,1.9;3.2,0.5;adresse;;".. destination .."]" ..
+      "field[0.3,1.9;3.2,0.5;adresse;;".. portaladresse .."]" ..
       "field[0,0;0,0;posx;;"..pos.x.."]"..
       "field[0,0;0,0;posy;;"..pos.y.."]"..
       "field[0,0;0,0;posz;;"..pos.z.."]"..
