@@ -727,4 +727,4 @@ minetest.register_craft({
 			  {"default:steelblock","default:steelblock","default:steelblock"}}
 })
 
-startup()
+startup() 
