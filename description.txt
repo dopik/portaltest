@@ -1,0 +1,1 @@
+Adds Stargate-like portals to minetest, wich lets players, vehicles and items travel from A to B in an instant.
