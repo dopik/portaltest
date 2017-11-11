@@ -1,3 +1,21 @@
+Installation
+------------
+
+Unzip the archive, rename the folder to portaltest and
+place it in minetest/mods/
+
+(  GNU/Linux: If you use a system-wide installation place
+    it in ~/.minetest/mods/.  )
+
+(  If you only want this to be used in a single world, place
+    the folder in worldmods/ in your worlddirectory.  )
+
+For further information or help see:
+http://wiki.minetest.com/wiki/Installing_Mods
+
+Usage
+-----
+
 Adds Stargate-like portals to the game.
 These are built by first building a ring of portalstruct and then setting the core in the following formation
 
