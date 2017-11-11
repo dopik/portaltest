@@ -31,7 +31,7 @@ SSCSS
 
 Now you'll have to set a the controller next to the portal (max. 3 blocks away)
 
-Your portal is now built (YAY :D). To use it, follow the these steps:
+Your portal is now built (YAY :D). To use it, follow these steps:
 
 1) Each portal has an unique adress, so find it out. You can find the adress of a portal by rightclicking the controller of that portal. The adress is the string in the coloured bar.
 2) Now fuel up your portal. To do so, rightclick the core and place some blue/red/green mese (see how to craft that in the crafts section) into the slot.
