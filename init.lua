@@ -406,7 +406,7 @@ local function formspec(pos, player, placeholdername, placeholderadresse)
       "label[2.34,0;".. get_adress(pos) .."]" ..
       "box[0,0;5.2,0.4;#ff0000]" ..
       "field[0.3,1;3.2,0.5;name;;".. portalname .."]" ..
-      "field[0.3,1.9;3.2,0.5;adresse;;".. portaladresse .."]" ..
+      "field[0.3,1.9;3.2,0.5;adresse;;".. destination .."]" ..
       "field[0,0;0,0;posx;;"..pos.x.."]"..
       "field[0,0;0,0;posy;;"..pos.y.."]"..
       "field[0,0;0,0;posz;;"..pos.z.."]"..
@@ -581,7 +581,6 @@ minetest.register_node("portaltest:core",{
     on_construct = function(pos)
 		local formspec_def = 
 		"size[8,6]"..
-		"label[3.4,0;Red Mese]"..
 		"list[current_name;fuelslot;3.5,0.5;1,1;]"..
 		"list[current_player;main;0,1.75;8,1;]"..
 		"list[current_player;main;0,3;8,3;8]"
