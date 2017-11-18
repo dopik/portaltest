@@ -243,9 +243,10 @@ end
 local dial = function(pos,adress)
 	if not use_power(pos,75*25) then return end
     local meta = minetest.get_meta(pos)
-	minetest.get_voxel_manip():read_from_map(vector.multiply(id_to_mb(adress_to_id(adress)),16), vector.add(vector.multiply(id_to_mb(adress_to_id(adress)),16),vector.new(15,15,15)))
+	
     if meta:get_int("active") == 1 or not 
 	is_allowed(adress) then
+		minetest.get_voxel_manip():read_from_map(vector.multiply(id_to_mb(adress_to_id(adress)),16), vector.add(vector.multiply(id_to_mb(adress_to_id(adress)),16),vector.new(15,15,15)))
         meta:set_int("active",0)
 		adress = meta:get_string("adress")
         place_portal(pos,meta:get_string("dir"),"portaltest:air")
@@ -266,6 +267,7 @@ local dial = function(pos,adress)
         return
     end
 
+	minetest.get_voxel_manip():read_from_map(vector.multiply(id_to_mb(adress_to_id(adress)),16), vector.add(vector.multiply(id_to_mb(adress_to_id(adress)),16),vector.new(15,15,15)))
     local dmeta = minetest.get_meta(dest)
     if dmeta:get_int("active") == 0 then
 		if use_power(pos,75*25) then
