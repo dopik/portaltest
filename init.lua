@@ -7,22 +7,17 @@ local startup = function()
     local temp = {}
     if modstorage:get_int("startup") ~= 1 then
         for i = 1, 64, 1 do
-            minetest.log("error","insert")
             table.insert(temp,math.random(1,i),i)
-            minetest.chat_send_all("inserted")
         end
         for i = 1, 64, 1 do
             modstorage:set_int(i,temp[i])
-            minetest.chat_send_all("saved")
         end
     else
         for i = 1, 64, 1 do
             temp[i]=modstorage:get_int(i)
         end
     end
-    minetest.log("error",dump(temp))
     modstorage:set_int("startup",1)
-    minetest.chat_send_all("doing startup")
    
     local abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"
     local i = 1
@@ -56,7 +51,7 @@ local use_power = function(pos,amount)
 			dif = math.ceil(dif/(900*50))
 			stack:set_count(stack:get_count()-dif)
 			meta:set_int("fuel",fuel+(dif*900*50)-amount)
-		elseif stack:get_name() == "portaltest:red_mese" then
+		elseif stack:get_name() == "portaltest:green_mese" then
 			dif = math.ceil(dif/(300*50))
 			stack:set_count(stack:get_count()-dif)
 			meta:set_int("fuel",fuel+(dif*300*50)-amount)
@@ -137,7 +132,6 @@ end
 
 local adress_to_id = function(adress)
     if string.len(adress) ~= 7 then
-        minetest.chat_send_all(adress.."     "..string.len(adress))
         return
     end
    
@@ -247,6 +241,7 @@ local place_portal = function(pos,dir,block)
 end
 
 local dial = function(pos,adress)
+	if not use_power(pos,75*25) then return end
     local meta = minetest.get_meta(pos)
 	minetest.get_voxel_manip():read_from_map(vector.multiply(id_to_mb(adress_to_id(adress)),16), vector.add(vector.multiply(id_to_mb(adress_to_id(adress)),16),vector.new(15,15,15)))
     if meta:get_int("active") == 1 or not 
@@ -273,7 +268,7 @@ local dial = function(pos,adress)
 
     local dmeta = minetest.get_meta(dest)
     if dmeta:get_int("active") == 0 then
-		if use_power(pos,75*50) then
+		if use_power(pos,75*25) then
 			meta:set_int("active",1)
 			dmeta:set_int("active",1)
 			meta:set_string("adress",adress)
@@ -314,7 +309,7 @@ local destroy_gate = function(dir,pos)
 end
 
 local get_status = function(pos)
-return minetest.get_meta(pos):get_int("active")==1
+	return minetest.get_meta(pos):get_int("active")==1
 end
 
 local get_adress = function(pos)
@@ -421,7 +416,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "portaltest:portalon" or formname == "portaltest:portaloff" then
     local pos = {x = tonumber(fields.posx), y = tonumber(fields.posy), z = tonumber(fields.posz)}
     if fields.teleportbutton then
-		if not is_allowed(fields.adresse) then return end
+		local meta = minetest.get_meta(pos)
+		if not is_allowed(fields.adresse) or meta:get_string("ownadress") == fields.adress then return end
 		dial(pos, fields.adresse)
     end
     if fields.addbutton and fields.name ~= "" and fields.name ~= "Portalname" and string.len(fields.adresse) == 7 and double_fav(pos, fields.adresse) == nil then
@@ -451,7 +447,6 @@ minetest.register_entity("portaltest:portalent",{
     on_step = function(self,dtime)
         local pos = self.object:getpos()
         if minetest.get_node(pos).name ~= "portaltest:portal" or get_far_node(vector.add(pos,vector.new(0,-2,0))).name ~= "portaltest:core" then
-			minetest.chat_send_all("portalent removed")
             self.object:remove()
             minetest.forceload_free_block(pos)
             return
@@ -459,7 +454,6 @@ minetest.register_entity("portaltest:portalent",{
 		local adress = minetest.get_meta(vector.add(pos,vector.new(0,-2,0))):get_string("adress")
 		if not use_power(vector.add(pos,vector.new(0,-2,0)),1) then
 			dial(vector.add(pos,vector.new(0,-2,0)),adress)
-			minetest.chat_send_all("portalent removed")
             self.object:remove()
             minetest.forceload_free_block(pos)
             return
@@ -691,15 +685,15 @@ minetest.register_abm({
 		elseif rnd <= 0.49 then
 			minetest.dig_node(pos)
 			if math.random(1,2) == 1 then
-				minetest.add_item(pos,"portaltest:green_mese "..math.random(5,8))
+				minetest.add_item(pos,"portaltest:red_mese "..math.random(5,8))
 			end
 		elseif rnd <= 0.98 then
 			minetest.dig_node(pos)
 			if math.random(1,2) == 1 then
-				minetest.add_item(pos,"portaltest:green_mese "..math.random(2,5))
+				minetest.add_item(pos,"portaltest:red_mese "..math.random(2,5))
 			end
 			if math.random(1,4) == 1 then
-				minetest.add_item(pos,"portaltest:red_mese "..math.random(1,3))
+				minetest.add_item(pos,"portaltest:green_mese "..math.random(1,3))
 			end
 		end
 	end
@@ -715,14 +709,14 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "portaltest:structblock",
 	recipe = {{"default:steelblock","default:steel_ingot","default:steelblock"},
-			  {"default:steel_ingot","portaltest:green_mese","default:steel_ingot"},
+			  {"default:steel_ingot","portaltest:red_mese","default:steel_ingot"},
 			  {"default:steelblock","default:steel_ingot","default:steelblock"}}
 })
 
 minetest.register_craft({
 	output = "portaltest:controller",
 	recipe = {{"default:steel_ingot","default:mese_shard","default:steel_ingot"},
-			  {"default:steel_ingot","portaltest:red_mese","default:steel_ingot"},
+			  {"default:steel_ingot","portaltest:green_mese","default:steel_ingot"},
 			  {"default:steelblock","default:steelblock","default:steelblock"}}
 })
 
